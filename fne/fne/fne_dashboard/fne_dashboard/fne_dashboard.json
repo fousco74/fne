@@ -1,0 +1,43 @@
+{
+ "cards": [
+  {
+   "card": "This month pdf certified"
+  },
+  {
+   "card": "This month pdf not certified"
+  },
+  {
+   "card": "Pdf sent to fne for certification this month"
+  }
+ ],
+ "charts": [
+  {
+   "chart": "Invoice certified",
+   "width": "Full"
+  },
+  {
+   "chart": "Invoice certified by type",
+   "width": "Half"
+  },
+  {
+   "chart": "Invoice not certified by type",
+   "width": "Half"
+  },
+  {
+   "chart": "Fne Invoice  by status",
+   "width": "Full"
+  }
+ ],
+ "creation": "2026-01-26 17:17:15.948536",
+ "dashboard_name": "FNE Dashboard",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 1,
+ "is_standard": 1,
+ "modified": "2026-01-26 17:31:56.873783",
+ "modified_by": "Administrator",
+ "module": "FNE",
+ "name": "FNE Dashboard",
+ "owner": "Administrator"
+}

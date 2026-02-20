@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-12 12:32:31.573925",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "reference_doctype",
+  "reference_name",
+  "fne_invoice_type",
+  "status",
+  "attempts",
+  "fne_reference",
+  "pdf_file",
+  "fne_invoice_id",
+  "token_url",
+  "balance_sticker",
+  "pdf_sha256",
+  "pdf_fetched_at",
+  "certified_at",
+  "column_break_lgwx",
+  "warning",
+  "next_retry_at",
+  "last_error",
+  "request_payload_json",
+  "response_json",
+  "section_break_fzse",
+  "items_map"
+ ],
+ "fields": [
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "fne_invoice_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "FNE Type",
+   "options": "sale\npurchase\nrefund",
+   "reqd": 1
+  },
+  {
+   "default": "QUEUED",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "QUEUED\nCERTIFIED\nPDF_PENDING\nPDF_READY\nFAILED\nDEAD\nDISABLED"
+  },
+  {
+   "default": "0",
+   "fieldname": "attempts",
+   "fieldtype": "Int",
+   "label": "Attempts"
+  },
+  {
+   "fieldname": "fne_reference",
+   "fieldtype": "Data",
+   "label": "FNE Reference"
+  },
+  {
+   "fieldname": "pdf_file",
+   "fieldtype": "Attach",
+   "label": "PDF File"
+  },
+  {
+   "fieldname": "fne_invoice_id",
+   "fieldtype": "Data",
+   "label": "FNE Invoice ID"
+  },
+  {
+   "fieldname": "token_url",
+   "fieldtype": "Data",
+   "label": "Token URL"
+  },
+  {
+   "fieldname": "balance_sticker",
+   "fieldtype": "Int",
+   "label": "Balance Sticker/Funds"
+  },
+  {
+   "fieldname": "pdf_sha256",
+   "fieldtype": "Data",
+   "label": "PDF SHA256"
+  },
+  {
+   "fieldname": "pdf_fetched_at",
+   "fieldtype": "Datetime",
+   "label": "PDF Fetched At"
+  },
+  {
+   "fieldname": "certified_at",
+   "fieldtype": "Datetime",
+   "label": "Certified At"
+  },
+  {
+   "fieldname": "column_break_lgwx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "warning",
+   "fieldtype": "Check",
+   "label": "Warning"
+  },
+  {
+   "fieldname": "next_retry_at",
+   "fieldtype": "Datetime",
+   "label": "Next Retry At"
+  },
+  {
+   "fieldname": "last_error",
+   "fieldtype": "Small Text",
+   "label": "Last Error"
+  },
+  {
+   "fieldname": "request_payload_json",
+   "fieldtype": "Long Text",
+   "label": "Request Payload (JSON)"
+  },
+  {
+   "fieldname": "response_json",
+   "fieldtype": "Long Text",
+   "label": "Response (JSON)"
+  },
+  {
+   "fieldname": "section_break_fzse",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items_map",
+   "fieldtype": "Table",
+   "label": "Items Map",
+   "options": "FNE Item Map"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-26 11:02:58.939704",
+ "modified_by": "Administrator",
+ "module": "FNE",
+ "name": "FNE Document",
+ "owner": "fkone@amoaman.com",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

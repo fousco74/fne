@@ -1,0 +1,242 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-11 18:45:37.963674",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "environment",
+  "base_url_sandbox",
+  "base_url_prod",
+  "api_key",
+  "http_timeout_seconds",
+  "certify_on",
+  "column_break_ftng",
+  "payment_method_default",
+  "purchase_template_default",
+  "default_company",
+  "default_commercial_message",
+  "default_footer",
+  "use_pos",
+  "standard_pos",
+  "sticker_policy_section",
+  "sticker_warning_threshold",
+  "column_break_sghp",
+  "block_on_sticker_warning",
+  "pdf_section",
+  "pdf_fetch_strategy",
+  "pdf_endpoint_template",
+  "pdf_poll_interval_seconds",
+  "column_break_awrc",
+  "pdf_max_wait_seconds",
+  "tax_mapping_mode",
+  "default_vat_code",
+  "remote_section",
+  "remote_control_enabled",
+  "remote_control_url",
+  "remote_public_key_b64",
+  "remote_cache_ttl_seconds"
+ ],
+ "fields": [
+  {
+   "default": "SANDBOX",
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "SANDBOX\nPRODUCTION"
+  },
+  {
+   "default": "http://54.247.95.108/ws",
+   "fieldname": "base_url_sandbox",
+   "fieldtype": "Data",
+   "label": "Base URL Sandbox"
+  },
+  {
+   "fieldname": "base_url_prod",
+   "fieldtype": "Data",
+   "label": "Base URL Prod"
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key"
+  },
+  {
+   "default": "30",
+   "fieldname": "http_timeout_seconds",
+   "fieldtype": "Int",
+   "label": "HTTP Timeout (s)"
+  },
+  {
+   "default": "SUBMIT",
+   "fieldname": "certify_on",
+   "fieldtype": "Select",
+   "label": "Certify On",
+   "options": "SUBMIT\nPAYMENT\nMANUAL"
+  },
+  {
+   "fieldname": "column_break_ftng",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_method_default",
+   "fieldtype": "Select",
+   "label": "Payment Method Default",
+   "options": "cash\ncard\ncheck\nmobile-money\ntransfer\ndeferred"
+  },
+  {
+   "default": "B2B",
+   "fieldname": "purchase_template_default",
+   "fieldtype": "Select",
+   "label": "Purchase Template Default",
+   "options": "B2B\nB2C\nB2G\nB2F"
+  },
+  {
+   "fieldname": "default_company",
+   "fieldtype": "Link",
+   "label": "Default Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "default_commercial_message",
+   "fieldtype": "Data",
+   "label": "Default Commercial Message"
+  },
+  {
+   "fieldname": "default_footer",
+   "fieldtype": "Data",
+   "label": "Default Footer"
+  },
+  {
+   "fieldname": "sticker_policy_section",
+   "fieldtype": "Section Break",
+   "label": "Sticker Policy"
+  },
+  {
+   "default": "0",
+   "fieldname": "sticker_warning_threshold",
+   "fieldtype": "Int",
+   "label": "Warn if balance <= "
+  },
+  {
+   "fieldname": "column_break_sghp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "block_on_sticker_warning",
+   "fieldtype": "Check",
+   "label": "Block on warning/low balance"
+  },
+  {
+   "fieldname": "pdf_section",
+   "fieldtype": "Section Break",
+   "label": "PDF Fetch"
+  },
+  {
+   "default": "NETWORK_TRACE_FIRST",
+   "fieldname": "pdf_fetch_strategy",
+   "fieldtype": "Select",
+   "label": "PDF Strategy",
+   "options": "NETWORK_TRACE_FIRST\nHEADLESS_FIRST\nNETWORK_TRACE_ONLY\nHEADLESS_ONLY"
+  },
+  {
+   "fieldname": "pdf_endpoint_template",
+   "fieldtype": "Data",
+   "label": "PDF Endpoint Template (optional)"
+  },
+  {
+   "default": "2",
+   "fieldname": "pdf_poll_interval_seconds",
+   "fieldtype": "Int",
+   "label": "Poll Interval (s)"
+  },
+  {
+   "fieldname": "column_break_awrc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pdf_max_wait_seconds",
+   "fieldtype": "Int",
+   "label": "Max Wait (s)"
+  },
+  {
+   "fieldname": "tax_mapping_mode",
+   "fieldtype": "Select",
+   "label": "Tax Mapping Mode",
+   "options": "SIMPLE\nMANUAL"
+  },
+  {
+   "default": "TVA",
+   "fieldname": "default_vat_code",
+   "fieldtype": "Select",
+   "label": "Default VAT Code",
+   "options": "TVA\nTVAB\nTVAC\nTVAD"
+  },
+  {
+   "fieldname": "remote_section",
+   "fieldtype": "Section Break",
+   "label": "Remote Control (PROD)"
+  },
+  {
+   "default": "0",
+   "fieldname": "remote_control_enabled",
+   "fieldtype": "Check",
+   "label": "Remote enable/disable enforced (PROD only)"
+  },
+  {
+   "fieldname": "remote_control_url",
+   "fieldtype": "Data",
+   "label": "Remote Status URL"
+  },
+  {
+   "fieldname": "remote_public_key_b64",
+   "fieldtype": "Data",
+   "label": "Remote Public Key (Ed25519) base64"
+  },
+  {
+   "default": "1800",
+   "fieldname": "remote_cache_ttl_seconds",
+   "fieldtype": "Int",
+   "label": "Remote Cache TTL (s)"
+  },
+  {
+   "default": "0",
+   "fieldname": "use_pos",
+   "fieldtype": "Check",
+   "label": "Use POS ?"
+  },
+  {
+   "fieldname": "standard_pos",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Point de vente standard",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-01-28 10:30:53.580810",
+ "modified_by": "Administrator",
+ "module": "FNE",
+ "name": "FNE Settings",
+ "owner": "fkone@amoaman.com",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

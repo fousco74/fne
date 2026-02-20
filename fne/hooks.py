@@ -5,6 +5,15 @@ app_description = "Facture Normalisé Electronique"
 app_email = "fkone@amoaman.com"
 app_license = "mit"
 
+fixtures = [
+    {"dt": "Custom Field", "filters": [["name", "like", "%-custom_%"]]},
+    {"dt": "Property Setter", "filters": [["name", "like", "%FNE%"]]},
+    "FNE Settings",
+    "FNE Establishment",
+    "FNE Point of Sale",
+]
+
+
 # Apps
 # ------------------
 
@@ -28,6 +37,11 @@ app_license = "mit"
 # app_include_css = "/assets/fne/css/fne.css"
 # app_include_js = "/assets/fne/js/fne.js"
 
+app_include_js = [
+    "/assets/fne/js/fne_common.js",
+    #"/assets/fne/js/boot_remote_control.js",
+]
+
 # include js, css files in header of web template
 # web_include_css = "/assets/fne/css/fne.css"
 # web_include_js = "/assets/fne/js/fne.js"
@@ -40,10 +54,20 @@ app_license = "mit"
 # webform_include_css = {"doctype": "public/css/doctype.css"}
 
 # include js in page
-# page_js = {"page" : "public/js/file.js"}
+page_js = {
+    #"point-of-sale" : "public/js/pos_custom_print.js",
+	#"pos" : "public/js/pos_custom_print.js",
+           }
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+
+doctype_js = {
+    "Sales Invoice": "public/js/sales_invoice.js",
+    "Purchase Invoice": "public/js/purchase_invoice.js",
+    #"POS Invoice": "public/js/pos_invoice.js",
+
+}
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -137,34 +161,32 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Sales Invoice": {
+        "on_submit": "fne.services.certification.on_sales_invoice_submit",
+    },
+    "Purchase Invoice": {
+        "on_submit": "fne.services.certification.on_purchase_invoice_submit",
+    },
+    "POS Invoice": {
+        "on_submit": "fne.services.certification.on_pos_invoice_submit",
+    },
+}
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"fne.tasks.all"
-# 	],
-# 	"daily": [
-# 		"fne.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"fne.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"fne.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"fne.tasks.monthly"
-# 	],
-# }
+# Scheduler (retry + remote polling cache warmup)
+#scheduler_events = {
+    #"cron": {
+        #"*/10 * * * *": [
+            #"fne.jobs.retry_scheduler_job.run_retry_scheduler",
+        #],
+        #"*/30 * * * *": [
+           # "fne.api.remote_control.warmup_remote_status_cache",
+        #],
+    #}
+#}
 
 # Testing
 # -------
