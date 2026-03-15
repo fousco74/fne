@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <!-- Fond cercle dégradé -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a6ef7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="40" cy="40" r="40" fill="url(#bg)"/>
+
+  <!-- Document -->
+  <rect x="18" y="13" width="36" height="46" rx="3" ry="3" fill="white" opacity="0.97"/>
+  <!-- Coin plié -->
+  <polygon points="42,13 54,25 42,25" fill="#bbdefb"/>
+  <polygon points="42,13 54,13 54,25" fill="#90caf9"/>
+
+  <!-- Lignes de texte -->
+  <rect x="24" y="32" width="24" height="3" rx="1.5" fill="#1a6ef7" opacity="0.7"/>
+  <rect x="24" y="39" width="20" height="3" rx="1.5" fill="#1a6ef7" opacity="0.5"/>
+  <rect x="24" y="46" width="14" height="3" rx="1.5" fill="#1a6ef7" opacity="0.35"/>
+
+  <!-- Badge check vert -->
+  <circle cx="55" cy="58" r="12" fill="#43a047"/>
+  <polyline points="49,58 53,62 61,52" fill="none" stroke="white" stroke-width="2.8"
+            stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
