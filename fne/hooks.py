@@ -8,9 +8,7 @@ app_license = "mit"
 fixtures = [
 	{"dt": "Custom Field",    "filters": [["name", "like", "%-custom_%"]]},
 	{"dt": "Property Setter", "filters": [["name", "like", "%FNE%"]]},
-	"FNE Settings",
-	"FNE Establishment",
-	"FNE Point of Sale",
+	"FNE Settings"
 ]
 
 

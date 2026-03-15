@@ -1,0 +1,33 @@
+[
+ {
+  "api_key": "********************************",
+  "base_url_prod": null,
+  "base_url_sandbox": "http://54.247.95.108/ws",
+  "block_on_sticker_warning": 0,
+  "certify_on": "MANUAL",
+  "default_commercial_message": null,
+  "default_company": "AMOAMAN & ASSOCIES",
+  "default_footer": null,
+  "default_vat_code": "TVA",
+  "docstatus": 0,
+  "doctype": "FNE Settings",
+  "environment": "SANDBOX",
+  "http_timeout_seconds": 50,
+  "modified": "2026-03-15 21:17:00.221410",
+  "name": "FNE Settings",
+  "payment_method_default": "cash",
+  "pdf_endpoint_template": null,
+  "pdf_fetch_strategy": "NETWORK_TRACE_FIRST",
+  "pdf_max_wait_seconds": 0,
+  "pdf_poll_interval_seconds": 2,
+  "purchase_template_default": "B2B",
+  "remote_cache_ttl_seconds": 1800,
+  "remote_control_enabled": 0,
+  "remote_control_url": null,
+  "remote_public_key_b64": null,
+  "standard_pos": "CAISSE 1",
+  "sticker_warning_threshold": 0,
+  "tax_mapping_mode": "SIMPLE",
+  "use_pos": 0
+ }
+]
