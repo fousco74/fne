@@ -17,7 +17,7 @@
    "label": "Non certifiées par type"
   }
  ],
- "content": "[{\"id\":\"kpis\",\"type\":\"header\",\"data\":{\"text\":\"KPIs du mois\",\"col\":12}},{\"id\":\"card1\",\"type\":\"card\",\"data\":{\"card_name\":\"This month pdf certified\",\"col\":4}},{\"id\":\"card2\",\"type\":\"card\",\"data\":{\"card_name\":\"This month pdf not certified\",\"col\":4}},{\"id\":\"card3\",\"type\":\"card\",\"data\":{\"card_name\":\"Pdf sent to fne for certification this month\",\"col\":4}},{\"id\":\"charts\",\"type\":\"header\",\"data\":{\"text\":\"Graphiques\",\"col\":12}},{\"id\":\"ch1\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Fne Invoice  by status\",\"col\":6}},{\"id\":\"ch2\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice certified by type\",\"col\":6}},{\"id\":\"ch3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice not certified by status\",\"col\":6}},{\"id\":\"ch4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice not certified by type\",\"col\":6}},{\"id\":\"reports\",\"type\":\"header\",\"data\":{\"text\":\"Rapports\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Operations Summary\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Queue status\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Success or Failure\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Top errors\",\"col\":3}},{\"id\":\"sc5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Certified by Period\",\"col\":3}},{\"id\":\"sc6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Retry Analysis\",\"col\":3}},{\"id\":\"sc7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Avg time certif\\u2192PDF\",\"col\":3}},{\"id\":\"docs\",\"type\":\"header\",\"data\":{\"text\":\"Documents\",\"col\":12}},{\"id\":\"sc8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Document\",\"col\":3}},{\"id\":\"sc9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Settings\",\"col\":3}}]",
+ "content": "[{\"id\":\"dashboard\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Dashboard\",\"col\":12}},{\"id\":\"kpis\",\"type\":\"header\",\"data\":{\"text\":\"KPIs du mois\",\"col\":12}},{\"id\":\"card1\",\"type\":\"card\",\"data\":{\"card_name\":\"This month pdf certified\",\"col\":4}},{\"id\":\"card2\",\"type\":\"card\",\"data\":{\"card_name\":\"This month pdf not certified\",\"col\":4}},{\"id\":\"card3\",\"type\":\"card\",\"data\":{\"card_name\":\"Pdf sent to fne for certification this month\",\"col\":4}},{\"id\":\"charts\",\"type\":\"header\",\"data\":{\"text\":\"Graphiques\",\"col\":12}},{\"id\":\"ch1\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Fne Invoice  by status\",\"col\":6}},{\"id\":\"ch2\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice certified by type\",\"col\":6}},{\"id\":\"ch3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice not certified by status\",\"col\":6}},{\"id\":\"ch4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice not certified by type\",\"col\":6}},{\"id\":\"reports\",\"type\":\"header\",\"data\":{\"text\":\"Rapports\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Operations Summary\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Queue status\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Success or Failure\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Top errors\",\"col\":3}},{\"id\":\"sc5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Certified by Period\",\"col\":3}},{\"id\":\"sc6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Retry Analysis\",\"col\":3}},{\"id\":\"sc7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Avg time certif\\u2192PDF\",\"col\":3}},{\"id\":\"docs\",\"type\":\"header\",\"data\":{\"text\":\"Documents\",\"col\":12}},{\"id\":\"sc8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Document\",\"col\":3}},{\"id\":\"sc9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Settings\",\"col\":3}}]",
  "app": "fne",
  "creation": "2026-03-15 00:00:00.000000",
  "doctype": "Workspace",
@@ -26,7 +26,7 @@
  "hide_custom": 0,
  "is_hidden": 0,
  "label": "FNE",
- "modified": "2026-03-15 12:00:00.000000",
+ "modified": "2026-03-15 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "FNE",
  "name": "FNE",
@@ -54,6 +54,11 @@
  ],
  "sequence_id": 1,
  "shortcuts": [
+  {
+   "label": "FNE Dashboard",
+   "link_to": "FNE Dashboard",
+   "type": "Dashboard"
+  },
   {
    "color": "Blue",
    "format": "{} documents",
