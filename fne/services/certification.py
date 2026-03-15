@@ -172,9 +172,9 @@ def certify_now(doctype: str, docname: str, fne_type: str) -> str:
 
     doc = frappe.get_doc(doctype, docname)
 
-    # Les retours Purchase ne sont pas certifiables manuellement
+    # Les avoirs Purchase ne passent pas par le circuit FNE
     if doctype == "Purchase Invoice" and doc.is_return:
-        return
+        frappe.throw(frappe._("Les avoirs fournisseurs ne sont pas certifiables via FNE."))
 
     existing = frappe.db.get_value(
         "FNE Document",
@@ -183,17 +183,30 @@ def certify_now(doctype: str, docname: str, fne_type: str) -> str:
             "reference_name":    docname,
             "fne_invoice_type":  fne_type,
         },
-        ["name", "token_url"],
+        ["name", "status", "token_url"],
         as_dict=True,
     )
 
     if existing and existing.token_url:
         frappe.throw(frappe._("Ce document a déjà été certifié (token FNE existant)."))
 
-    if existing and existing.name:
-        frappe.delete_doc("FNE Document", existing.name, ignore_permissions=True)
+    if existing:
+        # Remise à zéro du document existant (FAILED/DEAD → QUEUED)
+        # On conserve l'historique des tentatives au lieu de supprimer/recréer
+        frappe.db.set_value(
+            "FNE Document",
+            existing.name,
+            {
+                "status":        STATUS_QUEUED,
+                "last_error":    "",
+                "next_retry_at": None,
+            },
+            update_modified=True,
+        )
+        fne_docname = existing.name
+    else:
+        fne_docname = ensure_fne_document(doctype, docname, fne_type)
 
-    fne_docname = ensure_fne_document(doctype, docname, fne_type)
     _link_fne_document(doc, fne_docname)
 
     enqueue_certification(
