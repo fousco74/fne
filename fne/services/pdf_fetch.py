@@ -57,20 +57,33 @@ def _attach_pdf(fne_doc, pdf_bytes: bytes):
     })
     filedoc.save(ignore_permissions=True)
 
-    fne_doc.pdf_file = filedoc.file_url
-    fne_doc.pdf_sha256 = h
-    fne_doc.status = STATUS_PDF_READY
-    fne_doc.pdf_fetched_at = now_utc()
-    fne_doc.save(ignore_permissions=True)
+    # Update FNE document safely (no version conflict)
+    frappe.db.set_value(
+        "FNE Document",
+        fne_doc.name,
+        {
+            "pdf_file": filedoc.file_url,
+            "pdf_sha256": h,
+            "status": STATUS_PDF_READY,
+            "pdf_fetched_at": now_utc()
+        },
+        update_modified=False
+    )
 
     # push back to ERP doc attach fields
     try:
-        src = frappe.get_doc(fne_doc.reference_doctype, fne_doc.reference_name)
-        src.db_set("custom_fne_pdf", filedoc.file_url, update_modified=False)
-        src.db_set("custom_fne_status", fne_doc.status, update_modified=False)
+        frappe.db.set_value(
+            fne_doc.reference_doctype,
+            fne_doc.reference_name,
+            {
+                "custom_fne_pdf": filedoc.file_url,
+                "custom_fne_status": STATUS_PDF_READY
+            },
+            update_modified=False
+        )
     except Exception:
         pass
-
+    
 def _network_trace_fetch_pdf(token_url: str, s) -> bytes:
     """
     Attempt to discover real PDF endpoint used by the verification page.

@@ -1,118 +1,207 @@
 # fne/services/certification.py
 from __future__ import annotations
-from typing import Optional, Dict, Any, List
 import frappe
-from fne.constants import (
-    STATUS_QUEUED, STATUS_CERTIFIED, STATUS_FAILED, STATUS_DISABLED,
-    FNE_INVOICE_TYPE_SALE, FNE_INVOICE_TYPE_PURCHASE, FNE_INVOICE_TYPE_REFUND,
-)
-from fne.services.guards import require_fne_enabled
-from fne.services import mapping
-from fne.jobs.certify_document_job import enqueue_certification
 from frappe.exceptions import DuplicateEntryError
+
+from fne.constants import (
+    STATUS_QUEUED,
+    FNE_INVOICE_TYPE_SALE,
+    FNE_INVOICE_TYPE_PURCHASE,
+    FNE_INVOICE_TYPE_REFUND,
+)
+
+from fne.services.guards import require_fne_enabled
+from fne.jobs.certify_document_job import enqueue_certification
 
 
 def _get_settings():
     return frappe.get_cached_doc("FNE Settings")
 
+
+# ---------------------------------------------------
+# Helpers
+# ---------------------------------------------------
+
+def _get_fne_type(doc, purchase=False):
+    if doc.is_return:
+        return FNE_INVOICE_TYPE_REFUND
+    return FNE_INVOICE_TYPE_PURCHASE if purchase else FNE_INVOICE_TYPE_SALE
+
+
+def _link_fne_document(doc, fne_docname):
+    doc.db_set("custom_fne_document", fne_docname, update_modified=True)
+
+
+# ---------------------------------------------------
+# Hooks
+# ---------------------------------------------------
+
 def on_pos_invoice_submit(doc, method=None):
     s = _get_settings()
-    if s.certify_on != "SUBMIT" or doc.is_consolidated == 1:
-        return
-   
-    if doc.is_return:
-        fne_type = FNE_INVOICE_TYPE_REFUND
-    else:
-        fne_type = FNE_INVOICE_TYPE_SALE
 
+    if s.certify_on != "SUBMIT" or doc.is_consolidated:
+        return
+
+    fne_type    = _get_fne_type(doc)
     fne_docname = ensure_fne_document("POS Invoice", doc.name, fne_type)
-    doc.custom_fne_document = fne_docname
-    doc.save(ignore_permissions=True)
-    enqueue_certification("POS Invoice", doc.name, fne_type, fne_docname=fne_docname, force=False)
+    _link_fne_document(doc, fne_docname)
+
+    enqueue_certification(
+        "POS Invoice",
+        doc.name,
+        fne_type,
+        fne_docname=fne_docname,
+        force=False,
+    )
+
 
 def on_sales_invoice_submit(doc, method=None):
     s = _get_settings()
-    if s.certify_on != "SUBMIT" or doc.is_consolidated == 1:
+
+    if s.certify_on != "SUBMIT" or doc.is_consolidated:
         return
 
-    if doc.is_return:
-        fne_type = FNE_INVOICE_TYPE_REFUND
-    else:
-        fne_type = FNE_INVOICE_TYPE_SALE
-
+    fne_type    = _get_fne_type(doc)
     fne_docname = ensure_fne_document("Sales Invoice", doc.name, fne_type)
-    doc.custom_fne_document = fne_docname
-    doc.save(ignore_permissions=True)    
-    enqueue_certification("Sales Invoice", doc.name, fne_type, fne_docname=fne_docname, force=False)
+    _link_fne_document(doc, fne_docname)
+
+    enqueue_certification(
+        "Sales Invoice",
+        doc.name,
+        fne_type,
+        fne_docname=fne_docname,
+        force=False,
+    )
 
 
 def on_purchase_invoice_submit(doc, method=None):
     s = _get_settings()
-    if s.certify_on != "SUBMIT":
+
+    # Les retours Purchase ne passent pas par ce hook (pas de refund FNE sur achat)
+    if s.certify_on != "SUBMIT" or doc.is_return:
         return
+
     if not _is_agricole_purchase(doc):
         return
-    
-    if doc.is_return:
-        fne_type = FNE_INVOICE_TYPE_REFUND
-    else:
-        fne_type = FNE_INVOICE_TYPE_PURCHASE
 
+    fne_type    = _get_fne_type(doc, purchase=True)
     fne_docname = ensure_fne_document("Purchase Invoice", doc.name, fne_type)
-    doc.custom_fne_document = fne_docname
-    doc.save(ignore_permissions=True)
-    enqueue_certification("Purchase Invoice", doc.name, fne_type, fne_docname=fne_docname, force=False)
+    _link_fne_document(doc, fne_docname)
 
+    enqueue_certification(
+        "Purchase Invoice",
+        doc.name,
+        fne_type,
+        fne_docname=fne_docname,
+        force=False,
+    )
+
+
+# ---------------------------------------------------
+# Business Logic
+# ---------------------------------------------------
 
 def _is_agricole_purchase(doc) -> bool:
     if getattr(doc, "custom_is_agricole", 0):
         return True
 
-    item_codes = [row.item_code for row in (getattr(doc, "items", []) or []) if row.item_code]
+    item_codes = [row.item_code for row in (doc.items or []) if row.item_code]
+
     if not item_codes:
         return False
 
-    rows = frappe.db.get_values(
+    return frappe.db.exists(
         "Item",
-        filters={"name": ["in", item_codes]},
-        fieldname=["name", "custom_is_agricole"],
-        as_dict=True,
+        {
+            "name": ["in", item_codes],
+            "custom_is_agricole": 1,
+        },
     )
-    return any(r.get("custom_is_agricole") for r in rows)
 
 
+# ---------------------------------------------------
+# FNE Document management
+# ---------------------------------------------------
 
 def ensure_fne_document(doctype: str, docname: str, fne_type: str) -> str:
+
     existing = frappe.db.get_value(
         "FNE Document",
-        {"reference_doctype": doctype, "reference_name": docname, "fne_invoice_type": fne_type},
+        {
+            "reference_doctype": doctype,
+            "reference_name":    docname,
+            "fne_invoice_type":  fne_type,
+        },
         "name",
     )
+
     if existing:
         return existing
 
     try:
-        d = frappe.get_doc({
-            "doctype": "FNE Document",
+        doc = frappe.get_doc({
+            "doctype":           "FNE Document",
             "reference_doctype": doctype,
-            "reference_name": docname,
-            "fne_invoice_type": fne_type,
-            "status": STATUS_QUEUED,
-            "attempts": 0,
+            "reference_name":    docname,
+            "fne_invoice_type":  fne_type,
+            "status":            STATUS_QUEUED,
+            "attempts":          0,
         })
-        d.insert(ignore_permissions=True)
-        return d.name
+        doc.insert(ignore_permissions=True)
+        return doc.name
+
     except DuplicateEntryError:
-        # quelqu’un l’a créé entre-temps
         return frappe.db.get_value(
             "FNE Document",
-            {"reference_doctype": doctype, "reference_name": docname, "fne_invoice_type": fne_type},
+            {
+                "reference_doctype": doctype,
+                "reference_name":    docname,
+                "fne_invoice_type":  fne_type,
+            },
             "name",
         )
 
 
+# ---------------------------------------------------
+# Manual certification
+# ---------------------------------------------------
+
 def certify_now(doctype: str, docname: str, fne_type: str) -> str:
+
     require_fne_enabled()
+
+    doc = frappe.get_doc(doctype, docname)
+
+    # Les retours Purchase ne sont pas certifiables manuellement
+    if doctype == "Purchase Invoice" and doc.is_return:
+        return
+
+    existing = frappe.db.get_value(
+        "FNE Document",
+        {
+            "reference_doctype": doctype,
+            "reference_name":    docname,
+            "fne_invoice_type":  fne_type,
+        },
+        ["name", "token_url"],
+        as_dict=True,
+    )
+
+    if existing and existing.token_url:
+        frappe.throw(frappe._("Ce document a déjà été certifié (token FNE existant)."))
+
+    if existing and existing.name:
+        frappe.delete_doc("FNE Document", existing.name, ignore_permissions=True)
+
     fne_docname = ensure_fne_document(doctype, docname, fne_type)
-    enqueue_certification(doctype, docname, fne_type, fne_docname=fne_docname, force=True)
+    _link_fne_document(doc, fne_docname)
+
+    enqueue_certification(
+        doctype,
+        docname,
+        fne_type,
+        fne_docname=fne_docname,
+        force=True,
+    )
+
     return fne_docname

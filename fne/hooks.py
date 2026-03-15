@@ -54,10 +54,10 @@ app_include_js = [
 # webform_include_css = {"doctype": "public/css/doctype.css"}
 
 # include js in page
-page_js = {
+#page_js = {
     #"point-of-sale" : "public/js/pos_custom_print.js",
 	#"pos" : "public/js/pos_custom_print.js",
-           }
+#           }
 
 # include js in doctype views
 
@@ -168,9 +168,9 @@ doc_events = {
     "Purchase Invoice": {
         "on_submit": "fne.services.certification.on_purchase_invoice_submit",
     },
-    "POS Invoice": {
-        "on_submit": "fne.services.certification.on_pos_invoice_submit",
-    },
+    #"POS Invoice": {
+        #"on_submit": "fne.services.certification.on_pos_invoice_submit",
+    #},
 }
 
 # Scheduled Tasks
@@ -264,3 +264,5 @@ doc_events = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+# Dans votre fichier hooks.py
+fixtures = ["Custom Field", "Property Setter"]
