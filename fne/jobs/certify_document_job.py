@@ -7,7 +7,7 @@ import frappe
 from frappe.exceptions import DoesNotExistError, TimestampMismatchError, QueryDeadlockError
 from frappe.utils import get_fullname, add_to_date
 
-from fne.constants import STATUS_CERTIFIED, STATUS_FAILED, STATUS_PDF_PENDING, RETRIABLE_HTTP
+from fne.constants import STATUS_CERTIFIED, STATUS_DEAD, STATUS_FAILED, STATUS_PDF_PENDING, RETRIABLE_HTTP
 from fne.services.guards import require_fne_enabled
 from fne.services.mapping import (
     _get_customer, _get_supplier, resolve_template, resolve_client_ncc,
@@ -318,11 +318,36 @@ def _resolve_custom_taxes_per_item(src) -> Dict[str, list]:
 # BASE PAYLOAD BUILDER
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _resolve_is_rne(src) -> dict:
+    """
+    Résout les champs isRne / rne (lien vers un RNE) depuis les custom fields ERPNext.
+    isRne est OBLIGATOIRE selon la spec DGI.
+    """
+    is_rne = bool(getattr(src, "custom_is_rne", False))
+    result: Dict[str, Any] = {"isRne": is_rne}
+    if is_rne:
+        result["rne"] = getattr(src, "custom_rne_number", None) or ""
+    return result
+
+
+def _resolve_template_b2f(base_template: str, src) -> str:
+    """
+    Surcharge le template en B2F si la facture utilise une devise étrangère
+    (spec DGI : foreignCurrency obligatoire pour B2F).
+    """
+    currency_info = _resolve_foreign_currency(src)
+    if currency_info.get("foreignCurrency"):
+        return "B2F"
+    return base_template
+
+
 def _build_base_payload(src, est: str, pos: str, s) -> Dict[str, Any]:
     """
     Socle commun à tous les types de factures.
     Tous les champs sont résolus automatiquement depuis ERPNext.
     """
+    currency_info = _resolve_foreign_currency(src)
+
     payload: Dict[str, Any] = {
         # ── Obligatoires ──────────────────────────────────────────────────────
         "establishment":     est,                                         # O
@@ -332,8 +357,10 @@ def _build_base_payload(src, est: str, pos: str, s) -> Dict[str, Any]:
         "clientPhone":       "",      # surchargé par l'appelant          # O
         "clientEmail":       "",      # surchargé par l'appelant          # O
         "items":             [],      # surchargé par l'appelant          # O
+        # isRne (O) — lien vers RNE, obligatoire selon spec DGI
+        **_resolve_is_rne(src),
         # foreignCurrency (N) + foreignCurrencyRate (O si currency non vide, 0 sinon)
-        **_resolve_foreign_currency(src),
+        **currency_info,
         # ── Optionnels ────────────────────────────────────────────────────────
         "paymentMethod":     _resolve_payment_method(
                                 src, fallback=s.payment_method_default or "cash"),
@@ -424,7 +451,7 @@ def run(
     # ── SALE ──────────────────────────────────────────────────────────────────
     if doctype == "Sales Invoice" and fne_type == "sale":
         customer = _get_customer(src)
-        template  = resolve_template(customer)
+        template  = _resolve_template_b2f(resolve_template(customer), src)
         seller    = getattr(src, "owner", None) or getattr(src, "modified_by", None)
 
         payload = _build_base_payload(src, est, pos, s)
@@ -436,9 +463,11 @@ def run(
             "clientEmail":       getattr(customer, "email_id",   "") or "",    # O
             "clientSellerName":  get_fullname(seller) if seller else "",       # N
             "items":             build_items_sale(src),                        # O
-            # customTaxes globaux (N) – name (O si non vide), amount (O si non vide)
-            "customTaxes":       resolve_custom_taxes_global(src),             # N
         })
+        # customTaxes globaux (N) – omis si vide (l'API rejette un array vide)
+        global_custom_taxes = resolve_custom_taxes_global(src)
+        if global_custom_taxes:
+            payload["customTaxes"] = global_custom_taxes
 
         # clientNcc : O si B2B
         ncc = resolve_client_ncc(customer, template)
@@ -458,7 +487,7 @@ def run(
     # ── PURCHASE ──────────────────────────────────────────────────────────────
     elif doctype == "Purchase Invoice" and fne_type == "purchase":
         supplier = _get_supplier(src)
-        template  = resolve_template(supplier)
+        template  = _resolve_template_b2f(resolve_template(supplier), src)
         seller    = getattr(src, "owner", None) or getattr(src, "modified_by", None)
 
         payload = _build_base_payload(src, est, pos, s)
@@ -561,9 +590,15 @@ def _build_refund_items(return_si, orig_fne_doc) -> list:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def _fail_fne_doc(fne_doc, error: str):
-    fne_doc.status     = STATUS_FAILED
+    """Business-logic failures that retrying cannot fix → DEAD immediately."""
+    fne_doc.status     = STATUS_DEAD
     fne_doc.last_error = error
     fne_doc.save(ignore_permissions=True)
+    try:
+        from fne.services.notifications import notify_dead_document
+        notify_dead_document(fne_doc.name, fne_doc.reference_doctype, fne_doc.reference_name, error)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "FNE dead-letter notification failed")
 
 
 def _persist_request_payload(fne_doc_name: str, payload: dict):
@@ -671,17 +706,29 @@ def _db_write_with_retry(fne_doc_name: str, updates: dict, item_rows: Optional[l
 def _handle_error(fne_doc, e: FNEApiError):
     attempts    = int(fne_doc.attempts or 0) + 1
     status_code = e.status_code or 0
+    is_retriable = status_code in RETRIABLE_HTTP
+
+    error_msg = f"[HTTP {status_code}] {e}" if status_code else str(e)
 
     updates = {
         "attempts":      attempts,
-        "last_error":    str(e),
+        "last_error":    error_msg,
         "response_json": json_dumps(e.payload or {}),
-        "status":        STATUS_FAILED if status_code in RETRIABLE_HTTP else "DEAD",
+        "status":        STATUS_FAILED if is_retriable else STATUS_DEAD,
     }
 
-    if status_code in RETRIABLE_HTTP:
+    if is_retriable:
         delay = exp_backoff_seconds(attempts, base=30, cap=3600)
         updates["next_retry_at"] = add_to_date(now_utc(), seconds=delay)
+    else:
+        # Functional HTTP error → notify dead-letter immediately
+        try:
+            from fne.services.notifications import notify_dead_document
+            notify_dead_document(
+                fne_doc.name, fne_doc.reference_doctype, fne_doc.reference_name, error_msg
+            )
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "FNE dead-letter notification failed")
 
     _db_write_with_retry(fne_doc.name, updates)
 

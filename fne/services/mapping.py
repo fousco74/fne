@@ -83,30 +83,44 @@ def resolve_establishment_pos(erp_doc=None) -> Tuple[str, str]:
 def build_items_sale(doc) -> List[Dict[str, Any]]:
     items = []
     for row in doc.items:
-        item = frappe.get_cached_doc("Item", row.item_code)
-        items.append({
-            "taxes": resolve_taxes_sale(doc, row),
-            "customTaxes": resolve_custom_taxes_item(doc, row),
-            "reference": row.item_code,
-            "description": row.description or row.item_name or row.item_code,
-            "quantity": float(abs(row.qty)),
-            "amount": float(row.rate),
-            "discount": float(row.discount_percentage or 0) if hasattr(row, "discount_percentage") else 0,
-            "measurementUnit": row.uom,
-        })
+        item: Dict[str, Any] = {
+            "taxes":       resolve_taxes_sale(doc, row),                         # O
+            "description": row.description or row.item_name or row.item_code,   # O
+            "quantity":    float(abs(row.qty)),                                  # O
+            "amount":      float(row.rate),                                      # O
+        }
+        # Optionnels — omis si vides/zéro (évite rejets API)
+        if row.item_code:
+            item["reference"] = row.item_code
+        discount = float(getattr(row, "discount_percentage", 0) or 0)
+        if discount:
+            item["discount"] = discount
+        if row.uom:
+            item["measurementUnit"] = row.uom
+        # customTaxes par item — omis si vide
+        ct = resolve_custom_taxes_item(doc, row)
+        if ct:
+            item["customTaxes"] = ct
+        items.append(item)
     return items
+
 
 def build_items_purchase(doc) -> List[Dict[str, Any]]:
     items = []
     for row in doc.items:
-        items.append({
-            "reference": row.item_code,
+        item: Dict[str, Any] = {
             "description": row.description or row.item_name or row.item_code,
-            "quantity": float(abs(row.qty)),
-            "amount": float(row.rate),
-            "discount": float(getattr(row, "discount_percentage", 0) or 0),
-            "measurementUnit": row.uom,
-        })
+            "quantity":    float(abs(row.qty)),
+            "amount":      float(row.rate),
+        }
+        if row.item_code:
+            item["reference"] = row.item_code
+        discount = float(getattr(row, "discount_percentage", 0) or 0)
+        if discount:
+            item["discount"] = discount
+        if row.uom:
+            item["measurementUnit"] = row.uom
+        items.append(item)
     return items
 
 def resolve_taxes_sale(doc, row) -> List[str]:

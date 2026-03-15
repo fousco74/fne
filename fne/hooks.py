@@ -6,11 +6,11 @@ app_email = "fkone@amoaman.com"
 app_license = "mit"
 
 fixtures = [
-    {"dt": "Custom Field", "filters": [["name", "like", "%-custom_%"]]},
-    {"dt": "Property Setter", "filters": [["name", "like", "%FNE%"]]},
-    "FNE Settings",
-    "FNE Establishment",
-    "FNE Point of Sale",
+	{"dt": "Custom Field",    "filters": [["name", "like", "%-custom_%"]]},
+	{"dt": "Property Setter", "filters": [["name", "like", "%FNE%"]]},
+	"FNE Settings",
+	"FNE Establishment",
+	"FNE Point of Sale",
 ]
 
 
@@ -33,236 +33,44 @@ fixtures = [
 # Includes in <head>
 # ------------------
 
-# include js, css files in header of desk.html
-# app_include_css = "/assets/fne/css/fne.css"
-# app_include_js = "/assets/fne/js/fne.js"
-
 app_include_js = [
-    "/assets/fne/js/fne_common.js",
-    #"/assets/fne/js/boot_remote_control.js",
+	"/assets/fne/js/fne_common.js",
 ]
 
-# include js, css files in header of web template
-# web_include_css = "/assets/fne/css/fne.css"
-# web_include_js = "/assets/fne/js/fne.js"
-
-# include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "fne/public/scss/website"
-
-# include js, css files in header of web form
-# webform_include_js = {"doctype": "public/js/doctype.js"}
-# webform_include_css = {"doctype": "public/css/doctype.css"}
-
-# include js in page
-#page_js = {
-    #"point-of-sale" : "public/js/pos_custom_print.js",
-	#"pos" : "public/js/pos_custom_print.js",
-#           }
-
 # include js in doctype views
-
 doctype_js = {
-    "Sales Invoice": "public/js/sales_invoice.js",
-    "Purchase Invoice": "public/js/purchase_invoice.js",
-    #"POS Invoice": "public/js/pos_invoice.js",
-
+	"Sales Invoice":   "public/js/sales_invoice.js",
+	"Purchase Invoice": "public/js/purchase_invoice.js",
 }
-
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
-# doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
-
-# Svg Icons
-# ------------------
-# include app icons in desk
-# app_include_icons = "fne/public/icons.svg"
 
 # Home Pages
 # ----------
 
-# application home page (will override Website Settings)
-# home_page = "login"
-
-# website user home page (by Role)
-# role_home_page = {
-# 	"Role": "home_page"
-# }
-
-# Generators
-# ----------
-
-# automatically create page for each record of this doctype
-# website_generators = ["Web Page"]
-
-# Jinja
-# ----------
-
-# add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "fne.utils.jinja_methods",
-# 	"filters": "fne.utils.jinja_filters"
-# }
-
-# Installation
-# ------------
-
-# before_install = "fne.install.before_install"
-# after_install = "fne.install.after_install"
-
-# Uninstallation
-# ------------
-
-# before_uninstall = "fne.uninstall.before_uninstall"
-# after_uninstall = "fne.uninstall.after_uninstall"
-
-# Integration Setup
-# ------------------
-# To set up dependencies/integrations with other apps
-# Name of the app being installed is passed as an argument
-
-# before_app_install = "fne.utils.before_app_install"
-# after_app_install = "fne.utils.after_app_install"
-
-# Integration Cleanup
-# -------------------
-# To clean up dependencies/integrations with other apps
-# Name of the app being uninstalled is passed as an argument
-
-# before_app_uninstall = "fne.utils.before_app_uninstall"
-# after_app_uninstall = "fne.utils.after_app_uninstall"
-
-# Desk Notifications
-# ------------------
-# See frappe.core.notifications.get_notification_config
-
-# notification_config = "fne.notifications.get_notification_config"
-
-# Permissions
-# -----------
-# Permissions evaluated in scripted ways
-
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
-#
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
-
-# DocType Class
-# ---------------
-# Override standard doctype classes
-
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
-
 # Document Events
 # ---------------
-# Hook on document methods and events
-
 doc_events = {
-    "Sales Invoice": {
-        "on_submit": "fne.services.certification.on_sales_invoice_submit",
-    },
-    "Purchase Invoice": {
-        "on_submit": "fne.services.certification.on_purchase_invoice_submit",
-    },
-    #"POS Invoice": {
-        #"on_submit": "fne.services.certification.on_pos_invoice_submit",
-    #},
+	"Sales Invoice": {
+		"on_submit": "fne.services.certification.on_sales_invoice_submit",
+	},
+	"Purchase Invoice": {
+		"on_submit": "fne.services.certification.on_purchase_invoice_submit",
+	},
+	# "POS Invoice": {
+	#     "on_submit": "fne.services.certification.on_pos_invoice_submit",
+	# },
 }
 
 # Scheduled Tasks
 # ---------------
-
-# Scheduler (retry + remote polling cache warmup)
-#scheduler_events = {
-    #"cron": {
-        #"*/10 * * * *": [
-            #"fne.jobs.retry_scheduler_job.run_retry_scheduler",
-        #],
-        #"*/30 * * * *": [
-           # "fne.api.remote_control.warmup_remote_status_cache",
-        #],
-    #}
-#}
+scheduler_events = {
+	"cron": {
+		# Retry des certifications FAILED toutes les 10 minutes
+		"*/10 * * * *": [
+			"fne.jobs.retry_scheduler_job.run_retry_scheduler",
+		],
+	}
+}
 
 # Testing
 # -------
-
 # before_tests = "fne.install.before_tests"
-
-# Overriding Methods
-# ------------------------------
-#
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "fne.event.get_events"
-# }
-#
-# each overriding function accepts a `data` argument;
-# generated from the base implementation of the doctype dashboard,
-# along with any modifications made in other Frappe apps
-# override_doctype_dashboards = {
-# 	"Task": "fne.task.get_dashboard_data"
-# }
-
-# exempt linked doctypes from being automatically cancelled
-#
-# auto_cancel_exempted_doctypes = ["Auto Repeat"]
-
-# Ignore links to specified DocTypes when deleting documents
-# -----------------------------------------------------------
-
-# ignore_links_on_delete = ["Communication", "ToDo"]
-
-# Request Events
-# ----------------
-# before_request = ["fne.utils.before_request"]
-# after_request = ["fne.utils.after_request"]
-
-# Job Events
-# ----------
-# before_job = ["fne.utils.before_job"]
-# after_job = ["fne.utils.after_job"]
-
-# User Data Protection
-# --------------------
-
-# user_data_fields = [
-# 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_3}",
-# 		"strict": False,
-# 	},
-# 	{
-# 		"doctype": "{doctype_4}"
-# 	}
-# ]
-
-# Authentication and authorization
-# --------------------------------
-
-# auth_hooks = [
-# 	"fne.auth.validate"
-# ]
-
-# Automatically update python controller files with type annotations for this app.
-# export_python_type_annotations = True
-
-# default_log_clearing_doctypes = {
-# 	"Logging DocType Name": 30  # days to retain logs
-# }
-
-# Dans votre fichier hooks.py
-fixtures = ["Custom Field", "Property Setter"]
