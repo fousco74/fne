@@ -1,26 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <!-- Fond cercle dégradé -->
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a6ef7;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <circle cx="40" cy="40" r="40" fill="url(#bg)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="80" height="80">
+  <!-- Fond blanc avec bordure orange -->
+  <circle cx="50" cy="50" r="47" fill="white" stroke="#F47920" stroke-width="6"/>
 
-  <!-- Document -->
-  <rect x="18" y="13" width="36" height="46" rx="3" ry="3" fill="white" opacity="0.97"/>
-  <!-- Coin plié -->
-  <polygon points="42,13 54,25 42,25" fill="#bbdefb"/>
-  <polygon points="42,13 54,13 54,25" fill="#90caf9"/>
+  <!-- Silhouette Côte d'Ivoire (approximation simplifiée) -->
+  <path d="
+    M 44,18
+    L 50,16
+    L 57,18
+    L 63,22
+    L 67,27
+    L 70,34
+    L 71,42
+    L 69,50
+    L 67,57
+    L 63,64
+    L 60,70
+    L 56,76
+    L 52,80
+    L 48,80
+    L 44,76
+    L 40,70
+    L 37,64
+    L 33,57
+    L 31,50
+    L 29,42
+    L 30,34
+    L 33,27
+    L 37,22
+    Z
+  " fill="none" stroke="#2E8B57" stroke-width="2" stroke-linejoin="round"/>
 
-  <!-- Lignes de texte -->
-  <rect x="24" y="32" width="24" height="3" rx="1.5" fill="#1a6ef7" opacity="0.7"/>
-  <rect x="24" y="39" width="20" height="3" rx="1.5" fill="#1a6ef7" opacity="0.5"/>
-  <rect x="24" y="46" width="14" height="3" rx="1.5" fill="#1a6ef7" opacity="0.35"/>
-
-  <!-- Badge check vert -->
-  <circle cx="55" cy="58" r="12" fill="#43a047"/>
-  <polyline points="49,58 53,62 61,52" fill="none" stroke="white" stroke-width="2.8"
-            stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Texte stylisé "fne" -->
+  <!-- f en orange -->
+  <text x="36" y="57" font-family="Arial, sans-serif" font-size="22" font-weight="900"
+        font-style="italic" fill="#F47920">f</text>
+  <!-- ne en vert -->
+  <text x="49" y="57" font-family="Arial, sans-serif" font-size="22" font-weight="900"
+        font-style="italic" fill="#2E8B57">ne</text>
 </svg>

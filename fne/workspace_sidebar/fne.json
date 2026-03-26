@@ -1,11 +1,23 @@
 {
  "app": "fne",
- "creation": "2026-03-15 00:00:00.000000",
+ "creation": "2026-03-15 21:41:38.225674",
  "docstatus": 0,
  "doctype": "Workspace Sidebar",
  "header_icon": "file-text",
  "idx": 0,
  "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "table_2",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Dashboard",
+   "link_to": "FNE Dashboard",
+   "link_type": "Dashboard",
+   "show_arrow": 0,
+   "type": "Link"
+  },
   {
    "child": 0,
    "collapsible": 0,
@@ -71,7 +83,7 @@
    "icon": "check-circle",
    "indent": 0,
    "keep_closed": 0,
-   "label": "Succès / Échecs",
+   "label": "Succ\u00e8s / \u00c9checs",
    "link_to": "Success or Failure",
    "link_type": "Report",
    "show_arrow": 0,
@@ -95,7 +107,7 @@
    "icon": "calendar",
    "indent": 0,
    "keep_closed": 0,
-   "label": "Certifiées par période",
+   "label": "Certifi\u00e9es par p\u00e9riode",
    "link_to": "FNE Certified by Period",
    "link_type": "Report",
    "show_arrow": 0,
@@ -107,8 +119,8 @@
    "icon": "clock",
    "indent": 0,
    "keep_closed": 0,
-   "label": "Temps Certif → PDF",
-   "link_to": "Avg time certif→PDF",
+   "label": "Temps Certif \u2192 PDF",
+   "link_to": "Avg time certif\u2192PDF",
    "link_type": "Report",
    "show_arrow": 0,
    "type": "Link"
@@ -126,7 +138,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-03-15 00:00:00.000000",
+ "modified": "2026-03-16 06:57:43.181894",
  "modified_by": "Administrator",
  "module": "FNE",
  "name": "FNE",

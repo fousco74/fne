@@ -1,0 +1,37 @@
+{
+ "app": "fne",
+ "bg_color": "gray",
+ "creation": "2026-03-25 20:23:07.993973",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_image": "/private/files/logofne.png",
+ "icon_type": "App",
+ "idx": 0,
+ "label": "FNE",
+ "link": "/fne/FNE",
+ "link_to": "FNE",
+ "link_type": "Workspace Sidebar",
+ "logo_url": "/assets/fne/images/fne_logo.png",
+ "modified": "2026-03-26 00:52:12.184336",
+ "modified_by": "Administrator",
+ "name": "FNE",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "sidebar": "FNE",
+ "standard": 1
+}

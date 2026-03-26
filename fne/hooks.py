@@ -21,7 +21,7 @@ fixtures = [
 add_to_apps_screen = [
 	{
 		"name": "fne",
-		"logo": "/assets/fne/images/fne_logo.svg",
+		"logo": "/assets/fne/images/fne_logo.png",
 		"title": "FNE",
 		"route": "/fne/FNE",
 	}
