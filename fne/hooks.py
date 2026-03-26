@@ -63,7 +63,7 @@ scheduler_events = {
 	"cron": {
 		# Retry des certifications FAILED toutes les 10 minutes
 		"*/10 * * * *": [
-			"fne.jobs.retry_scheduler_job.run_retry_scheduler",
+			#"fne.jobs.retry_scheduler_job.run_retry_scheduler",
 		],
 	}
 }

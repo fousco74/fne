@@ -30,7 +30,7 @@
  "is_hidden": 0,
  "label": "FNE \u2013 Facture Normalis\u00e9e \u00c9lectronique",
  "links": [],
- "modified": "2026-03-26 00:47:52.000710",
+ "modified": "2026-03-26 18:34:10.815902",
  "modified_by": "Administrator",
  "module": "FNE",
  "name": "FNE \u2013 Facture Normalis\u00e9e \u00c9lectronique",
@@ -61,6 +61,9 @@
   },
   {
    "role": "Sales Manager"
+  },
+  {
+   "role": "Sales User"
   }
  ],
  "sequence_id": 1.0,
