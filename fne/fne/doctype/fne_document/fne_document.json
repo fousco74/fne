@@ -55,7 +55,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "QUEUED\nCERTIFIED\nPDF_PENDING\nPDF_READY\nFAILED\nDEAD\nDISABLED"
+   "options": "QUEUED\nCERTIFIED\nPDF_PENDING\nPDF_READY\nPDF_FAILED\nFAILED\nDEAD\nDISABLED"
   },
   {
    "default": "0",

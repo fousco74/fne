@@ -14,8 +14,9 @@ def execute(filters=None):
 	columns = [
 		{"label": "Tentatives",     "fieldname": "attempts",   "fieldtype": "Int",     "width": 110},
 		{"label": "Total docs",     "fieldname": "total",      "fieldtype": "Int",     "width": 110},
-		{"label": "FAILED",         "fieldname": "failed_cnt", "fieldtype": "Int",     "width": 100},
-		{"label": "DEAD",           "fieldname": "dead_cnt",   "fieldtype": "Int",     "width": 100},
+		{"label": "FAILED",         "fieldname": "failed_cnt",     "fieldtype": "Int",     "width": 100},
+		{"label": "PDF_FAILED",     "fieldname": "pdf_failed_cnt", "fieldtype": "Int",     "width": 110},
+		{"label": "DEAD",           "fieldname": "dead_cnt",       "fieldtype": "Int",     "width": 100},
 		{"label": "% Dead",         "fieldname": "pct_dead",   "fieldtype": "Percent", "width": 100},
 		{"label": "Erreur fréq.",   "fieldname": "top_error",  "fieldtype": "Data",    "width": 300},
 	]
@@ -34,11 +35,12 @@ def execute(filters=None):
 		f"""
 		SELECT
 			IFNULL(attempts, 0)    AS attempts,
-			COUNT(*)               AS total,
-			SUM(status = 'FAILED') AS failed_cnt,
-			SUM(status = 'DEAD')   AS dead_cnt
+			COUNT(*)                   AS total,
+			SUM(status = 'FAILED')     AS failed_cnt,
+			SUM(status = 'PDF_FAILED') AS pdf_failed_cnt,
+			SUM(status = 'DEAD')       AS dead_cnt
 		FROM `tabFNE Document`
-		WHERE status IN ('FAILED', 'DEAD') {cond}
+		WHERE status IN ('FAILED', 'PDF_FAILED', 'DEAD') {cond}
 		GROUP BY attempts
 		ORDER BY attempts ASC
 		""",
@@ -53,7 +55,7 @@ def execute(filters=None):
 			f"""
 			SELECT LEFT(IFNULL(last_error, ''), 200) AS err, COUNT(*) AS cnt
 			FROM `tabFNE Document`
-			WHERE status IN ('FAILED','DEAD')
+			WHERE status IN ('FAILED','PDF_FAILED','DEAD')
 			  AND IFNULL(attempts, 0) = %(att)s
 			  {cond}
 			GROUP BY err
@@ -69,29 +71,32 @@ def execute(filters=None):
 	for r in raw:
 		total = int(r.total or 0) or 1
 		data.append({
-			"attempts":   int(r.attempts),
-			"total":      int(r.total or 0),
-			"failed_cnt": int(r.failed_cnt or 0),
-			"dead_cnt":   int(r.dead_cnt or 0),
-			"pct_dead":   round(100.0 * int(r.dead_cnt or 0) / total, 1),
-			"top_error":  top_errors.get(r.attempts, "")[:200],
+			"attempts":       int(r.attempts),
+			"total":          int(r.total or 0),
+			"failed_cnt":     int(r.failed_cnt or 0),
+			"pdf_failed_cnt": int(r.pdf_failed_cnt or 0),
+			"dead_cnt":       int(r.dead_cnt or 0),
+			"pct_dead":       round(100.0 * int(r.dead_cnt or 0) / total, 1),
+			"top_error":      top_errors.get(r.attempts, "")[:200],
 		})
 
 	# ─── Chart : Failed vs Dead par nombre de tentatives ───────────────────
-	labels   = [str(r["attempts"]) for r in data]
-	failed_v = [r["failed_cnt"] for r in data]
-	dead_v   = [r["dead_cnt"]   for r in data]
+	labels        = [str(r["attempts"]) for r in data]
+	failed_v      = [r["failed_cnt"]     for r in data]
+	pdf_failed_v  = [r["pdf_failed_cnt"] for r in data]
+	dead_v        = [r["dead_cnt"]       for r in data]
 
 	chart = {
 		"data": {
 			"labels":   labels,
 			"datasets": [
-				{"name": "FAILED (retryable)", "values": failed_v},
-				{"name": "DEAD (définitif)",   "values": dead_v},
+				{"name": "FAILED certif. (retryable)", "values": failed_v},
+				{"name": "PDF_FAILED (retryable)",     "values": pdf_failed_v},
+				{"name": "DEAD (définitif)",           "values": dead_v},
 			],
 		},
 		"type":   "bar",
-		"colors": ["#ff5858", "#dc3545"],
+		"colors": ["#ff5858", "#e67e22", "#dc3545"],
 		"barOptions": {"stacked": 1},
 		"axisOptions": {"xAxisMode": "tick"},
 	}

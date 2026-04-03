@@ -24,6 +24,7 @@
   "column_break_sghp",
   "block_on_sticker_warning",
   "pdf_section",
+  "enable_pdf_fetch",
   "pdf_fetch_strategy",
   "pdf_endpoint_template",
   "pdf_poll_interval_seconds",
@@ -132,6 +133,12 @@
    "fieldname": "pdf_section",
    "fieldtype": "Section Break",
    "label": "PDF Fetch"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_pdf_fetch",
+   "fieldtype": "Check",
+   "label": "Activer la récupération du PDF"
   },
   {
    "default": "NETWORK_TRACE_FIRST",

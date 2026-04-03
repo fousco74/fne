@@ -1,23 +1,31 @@
 {
  "charts": [
   {
-   "chart_name": "Fne Invoice  by status",
-   "label": "Statut des factures FNE"
+   "chart_name": "R\u00e9partition par statut",
+   "label": "R\u00e9partition par statut"
   },
   {
-   "chart_name": "Invoice certified by type",
-   "label": "Certifiées par type"
+   "chart_name": "Certifi\u00e9es par type de facture",
+   "label": "Certifi\u00e9es par type"
   },
   {
-   "chart_name": "Invoice not certified by status",
-   "label": "Non certifiées par statut"
+   "chart_name": "\u00c9volution des certifications",
+   "label": "\u00c9volution des certifications"
   },
   {
-   "chart_name": "Invoice not certified by type",
-   "label": "Non certifiées par type"
+   "chart_name": "Factures en erreur par statut",
+   "label": "Factures en erreur"
+  },
+  {
+   "chart_name": "En attente ou erreur par type",
+   "label": "En attente ou erreur par type"
+  },
+  {
+   "chart_name": "\u00c9volution des \u00e9checs par mois",
+   "label": "\u00c9volution des \u00e9checs"
   }
  ],
- "content": "[{\"id\":\"dashboard\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Dashboard\",\"col\":12}},{\"id\":\"kpis\",\"type\":\"header\",\"data\":{\"text\":\"KPIs du mois\",\"col\":12}},{\"id\":\"card1\",\"type\":\"card\",\"data\":{\"card_name\":\"This month pdf certified\",\"col\":4}},{\"id\":\"card2\",\"type\":\"card\",\"data\":{\"card_name\":\"This month pdf not certified\",\"col\":4}},{\"id\":\"card3\",\"type\":\"card\",\"data\":{\"card_name\":\"Pdf sent to fne for certification this month\",\"col\":4}},{\"id\":\"charts\",\"type\":\"header\",\"data\":{\"text\":\"Graphiques\",\"col\":12}},{\"id\":\"ch1\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Fne Invoice  by status\",\"col\":6}},{\"id\":\"ch2\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice certified by type\",\"col\":6}},{\"id\":\"ch3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice not certified by status\",\"col\":6}},{\"id\":\"ch4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Invoice not certified by type\",\"col\":6}},{\"id\":\"reports\",\"type\":\"header\",\"data\":{\"text\":\"Rapports\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Operations Summary\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Queue status\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Success or Failure\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Top errors\",\"col\":3}},{\"id\":\"sc5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Certified by Period\",\"col\":3}},{\"id\":\"sc6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Retry Analysis\",\"col\":3}},{\"id\":\"sc7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Avg time certif\\u2192PDF\",\"col\":3}},{\"id\":\"docs\",\"type\":\"header\",\"data\":{\"text\":\"Documents\",\"col\":12}},{\"id\":\"sc8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Document\",\"col\":3}},{\"id\":\"sc9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Settings\",\"col\":3}}]",
+ "content": "[{\"id\":\"dashboard\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Dashboard\",\"col\":12}},{\"id\":\"kpis\",\"type\":\"header\",\"data\":{\"text\":\"KPIs du mois\",\"col\":12}},{\"id\":\"card1\",\"type\":\"card\",\"data\":{\"card_name\":\"Factures certifi\u00e9es ce mois\",\"col\":4}},{\"id\":\"card2\",\"type\":\"card\",\"data\":{\"card_name\":\"Total soumis ce mois\",\"col\":4}},{\"id\":\"card3\",\"type\":\"card\",\"data\":{\"card_name\":\"PDF pr\u00eats ce mois\",\"col\":4}},{\"id\":\"card4\",\"type\":\"card\",\"data\":{\"card_name\":\"Factures en \u00e9chec ce mois\",\"col\":6}},{\"id\":\"card5\",\"type\":\"card\",\"data\":{\"card_name\":\"PDF non r\u00e9cup\u00e9r\u00e9s ce mois\",\"col\":6}},{\"id\":\"charts\",\"type\":\"header\",\"data\":{\"text\":\"Graphiques\",\"col\":12}},{\"id\":\"ch1\",\"type\":\"chart\",\"data\":{\"chart_name\":\"R\u00e9partition par statut\",\"col\":6}},{\"id\":\"ch2\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Certifi\u00e9es par type de facture\",\"col\":6}},{\"id\":\"ch3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"\u00c9volution des certifications\",\"col\":6}},{\"id\":\"ch4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Factures en erreur par statut\",\"col\":6}},{\"id\":\"ch5\",\"type\":\"chart\",\"data\":{\"chart_name\":\"En attente ou erreur par type\",\"col\":6}},{\"id\":\"ch6\",\"type\":\"chart\",\"data\":{\"chart_name\":\"\u00c9volution des \u00e9checs par mois\",\"col\":6}},{\"id\":\"reports\",\"type\":\"header\",\"data\":{\"text\":\"Rapports\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Operations Summary\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Queue status\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Success or Failure\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Top errors\",\"col\":3}},{\"id\":\"sc5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Certified by Period\",\"col\":3}},{\"id\":\"sc6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Retry Analysis\",\"col\":3}},{\"id\":\"sc7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Avg time certif\u2192PDF\",\"col\":3}},{\"id\":\"docs\",\"type\":\"header\",\"data\":{\"text\":\"Documents\",\"col\":12}},{\"id\":\"sc8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Document\",\"col\":3}},{\"id\":\"sc9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FNE Settings\",\"col\":3}}]",
  "app": "fne",
  "creation": "2026-03-15 00:00:00.000000",
  "doctype": "Workspace",
@@ -26,22 +34,30 @@
  "hide_custom": 0,
  "is_hidden": 0,
  "label": "FNE",
- "modified": "2026-03-15 13:00:00.000000",
+ "modified": "2026-04-01 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "FNE",
  "name": "FNE",
  "number_cards": [
   {
-   "label": "Ce mois - PDF certifiés",
-   "number_card_name": "This month pdf certified"
+   "label": "Certifi\u00e9es ce mois",
+   "number_card_name": "Factures certifi\u00e9es ce mois"
   },
   {
-   "label": "Ce mois - Non certifiés",
-   "number_card_name": "This month pdf not certified"
+   "label": "Total soumis ce mois",
+   "number_card_name": "Total soumis ce mois"
   },
   {
-   "label": "Ce mois - Soumis à FNE",
-   "number_card_name": "Pdf sent to fne for certification this month"
+   "label": "PDF pr\u00eats ce mois",
+   "number_card_name": "PDF pr\u00eats ce mois"
+  },
+  {
+   "label": "En \u00e9chec ce mois",
+   "number_card_name": "Factures en \u00e9chec ce mois"
+  },
+  {
+   "label": "PDF non r\u00e9cup\u00e9r\u00e9s ce mois",
+   "number_card_name": "PDF non r\u00e9cup\u00e9r\u00e9s ce mois"
   }
  ],
  "owner": "Administrator",
@@ -64,7 +80,7 @@
    "format": "{} documents",
    "label": "FNE Document",
    "link_to": "FNE Document",
-   "stats_filter": "{\"status\": [\"in\", [\"QUEUED\", \"FAILED\"]]}",
+   "stats_filter": "{\"status\": [\"in\", [\"QUEUED\", \"FAILED\", \"PDF_FAILED\"]]}",
    "type": "DocType"
   },
   {
@@ -74,41 +90,41 @@
    "type": "DocType"
   },
   {
-   "label": "Operations Summary",
+   "label": "R\u00e9sum\u00e9 op\u00e9rationnel",
    "link_to": "FNE Operations Summary",
    "type": "Report"
   },
   {
-   "label": "Queue Status",
+   "label": "Statut de la file",
    "link_to": "Queue status",
    "type": "Report"
   },
   {
-   "label": "Top Errors",
+   "label": "Top Erreurs",
    "link_to": "Top errors",
    "type": "Report"
   },
   {
-   "label": "Retry Analysis",
+   "label": "Analyse des retries",
    "link_to": "FNE Retry Analysis",
    "type": "Report"
   },
   {
-   "label": "Certifiées par période",
+   "label": "Certifi\u00e9es par p\u00e9riode",
    "link_to": "FNE Certified by Period",
    "type": "Report"
   },
   {
-   "label": "Succès / Échecs",
+   "label": "Succ\u00e8s / \u00c9checs",
    "link_to": "Success or Failure",
    "type": "Report"
   },
   {
-   "label": "Avg time certif→PDF",
-   "link_to": "Avg time certif→PDF",
+   "label": "Temps certif\u2192PDF",
+   "link_to": "Avg time certif\u2192PDF",
    "type": "Report"
   }
  ],
- "title": "FNE – Facture Normalisée Électronique",
+ "title": "FNE \u2013 Facture Normalis\u00e9e \u00c9lectronique",
  "type": "Workspace"
 }

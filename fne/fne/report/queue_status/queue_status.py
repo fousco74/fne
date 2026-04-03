@@ -3,13 +3,14 @@ from __future__ import annotations
 import frappe
 
 _COLOR_MAP = {
-	"Queued":        "#4099ff",
-	"Certified":     "#5e64ff",
-	"PDF Pending":   "#fd7e14",
-	"PDF Ready":     "#28a745",
-	"Retry Pending": "#ff5858",
-	"Dead-letter":   "#dc3545",
-	"Disabled":      "#aaaaaa",
+	"Queued":         "#4099ff",
+	"Certified":      "#5e64ff",
+	"PDF Pending":    "#fd7e14",
+	"PDF Ready":      "#28a745",
+	"PDF Failed":     "#e67e22",
+	"Retry Pending":  "#ff5858",
+	"Dead-letter":    "#dc3545",
+	"Disabled":       "#aaaaaa",
 }
 
 _STATUS_LABEL = {
@@ -17,6 +18,7 @@ _STATUS_LABEL = {
 	"CERTIFIED":   "Certified",
 	"PDF_PENDING": "PDF Pending",
 	"PDF_READY":   "PDF Ready",
+	"PDF_FAILED":  "PDF Failed",
 	"FAILED":      "Retry Pending",
 	"DEAD":        "Dead-letter",
 	"DISABLED":    "Disabled",
@@ -66,15 +68,17 @@ def execute(filters=None):
 	}
 
 	# ─── Summary ───────────────────────────────────────────────────────────
-	certified = sum(r["cnt"] for r in data if r["bucket"] in ("Certified", "PDF Ready", "PDF Pending"))
-	queued    = sum(r["cnt"] for r in data if r["bucket"] == "Queued")
-	problems  = sum(r["cnt"] for r in data if r["bucket"] in ("Retry Pending", "Dead-letter"))
+	certified   = sum(r["cnt"] for r in data if r["bucket"] in ("Certified", "PDF Ready", "PDF Pending"))
+	queued      = sum(r["cnt"] for r in data if r["bucket"] == "Queued")
+	pdf_failed  = sum(r["cnt"] for r in data if r["bucket"] == "PDF Failed")
+	problems    = sum(r["cnt"] for r in data if r["bucket"] in ("Retry Pending", "Dead-letter"))
 
 	summary = [
-		{"label": "Total documents",  "value": total,     "indicator": "blue"},
-		{"label": "Certifiés / Done", "value": certified, "indicator": "green"},
-		{"label": "En attente",       "value": queued,    "indicator": "orange"},
-		{"label": "En erreur",        "value": problems,  "indicator": "red"},
+		{"label": "Total documents",    "value": total,      "indicator": "blue"},
+		{"label": "Certifiés / Done",   "value": certified,  "indicator": "green"},
+		{"label": "En attente",         "value": queued,     "indicator": "orange"},
+		{"label": "PDF non récupéré",   "value": pdf_failed, "indicator": "orange"},
+		{"label": "Erreurs certif.",    "value": problems,   "indicator": "red"},
 	]
 
 	return columns, data, None, chart, summary

@@ -3,6 +3,9 @@ from __future__ import annotations
 import frappe
 
 def enqueue_pdf_fetch(fne_document: str, force: bool = False):
+    s = frappe.get_cached_doc("FNE Settings")
+    if not s.enable_pdf_fetch:
+        return
     frappe.enqueue(
         "fne.jobs.fetch_pdf_job.run",
         queue="long",

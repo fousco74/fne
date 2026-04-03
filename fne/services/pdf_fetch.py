@@ -6,7 +6,7 @@ from typing import Optional, Tuple, List
 import requests
 import frappe
 from fne.utils import sha256_bytes, now_utc
-from fne.constants import STATUS_PDF_READY, STATUS_PDF_PENDING, STATUS_FAILED
+from fne.constants import STATUS_PDF_READY, STATUS_PDF_PENDING, STATUS_PDF_FAILED, STATUS_FAILED
 
 EXPORT_BTN_REGEX = re.compile(r'href="(blob:[^"]+)"', re.IGNORECASE)
 
@@ -36,8 +36,12 @@ def fetch_and_attach_pdf(fne_doc):
             err2 = str(e)
 
     if not pdf_bytes:
-        fne_doc.status = STATUS_FAILED
+        # Certification succeeded — seul le PDF fetch a échoué.
+        # On utilise PDF_FAILED (et non FAILED) pour ne pas masquer la certification.
+        fne_doc.status = STATUS_PDF_FAILED
         fne_doc.last_error = f"PDF fetch failed. network_trace={err1} headless={err2}"
+        fne_doc.attempts = (fne_doc.attempts or 0) + 1
+        fne_doc.next_retry_at = frappe.utils.add_to_date(None, minutes=5)
         fne_doc.save(ignore_permissions=True)
         return
 

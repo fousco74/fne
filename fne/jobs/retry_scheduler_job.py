@@ -1,7 +1,7 @@
 # fne/jobs/retry_scheduler_job.py
 from __future__ import annotations
 import frappe
-from fne.constants import STATUS_FAILED, STATUS_DEAD
+from fne.constants import STATUS_FAILED, STATUS_PDF_FAILED, STATUS_DEAD
 
 
 def run_retry_scheduler():
@@ -35,6 +35,43 @@ def run_retry_scheduler():
 			)
 		except Exception:
 			frappe.log_error(frappe.get_traceback(), f"FNE retry enqueue failed: {r.name}")
+
+	# ── Re-enqueue PDF_FAILED docs (cert OK, PDF non récupéré) ───────────────
+	pdf_rows = frappe.get_all(
+		"FNE Document",
+		filters={
+			"status":        STATUS_PDF_FAILED,
+			"next_retry_at": ("<=", now),
+			"attempts":      ("<=", 10),
+		},
+		fields=["name"],
+		limit=200,
+		order_by="next_retry_at asc",
+	)
+
+	for r in pdf_rows:
+		try:
+			frappe.enqueue(
+				"fne.jobs.fetch_pdf_job.run",
+				queue="long",
+				job_name=f"fne:pdf_retry:{r.name}",
+				fne_document=r.name,
+				force=True,
+				enqueue_after_commit=True,
+			)
+		except Exception:
+			frappe.log_error(frappe.get_traceback(), f"FNE PDF retry enqueue failed: {r.name}")
+
+	# ── Promote over-limit PDF_FAILED to DEAD ─────────────────────────────
+	frappe.db.sql(
+		"""
+		UPDATE `tabFNE Document`
+		SET status = %s
+		WHERE status = %s AND attempts > 10
+		""",
+		(STATUS_DEAD, STATUS_PDF_FAILED),
+	)
+	frappe.db.commit()
 
 	# ── Promote over-limit docs to DEAD and notify ─────────────────────────
 	dead_count = frappe.db.sql(

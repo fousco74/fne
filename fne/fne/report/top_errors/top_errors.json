@@ -11,8 +11,8 @@
    "fieldname": "status_filter",
    "label": "Statuts concernés",
    "fieldtype": "Select",
-   "options": "FAILED et DEAD\nDEAD uniquement\nFAILED uniquement",
-   "default": "FAILED et DEAD"
+   "options": "FAILED et DEAD\nFAILED, PDF_FAILED et DEAD\nDEAD uniquement\nFAILED uniquement\nPDF_FAILED uniquement",
+   "default": "FAILED, PDF_FAILED et DEAD"
   }
  ],
  "idx": 0,

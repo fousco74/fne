@@ -31,6 +31,8 @@ def _categorize_error(err: str) -> str:
 		return "Erreur parsing réponse"
 	if "mapping" in lower or "mapper" in lower:
 		return "Erreur mapping items"
+	if "pdf fetch failed" in lower or "no direct pdf endpoint" in lower or "playwright" in lower:
+		return "Erreur récupération PDF"
 	if "not certified" in lower or "fne document" in lower:
 		return "Erreur logique FNE"
 	return "Autre"
@@ -48,10 +50,15 @@ def execute(filters=None):
 	]
 
 	status_filter = "('FAILED','DEAD')"
-	if filters.get("status_filter") == "DEAD uniquement":
+	sf = filters.get("status_filter", "FAILED, PDF_FAILED et DEAD")
+	if sf == "FAILED, PDF_FAILED et DEAD":
+		status_filter = "('FAILED','PDF_FAILED','DEAD')"
+	elif sf == "DEAD uniquement":
 		status_filter = "('DEAD')"
-	elif filters.get("status_filter") == "FAILED uniquement":
+	elif sf == "FAILED uniquement":
 		status_filter = "('FAILED')"
+	elif sf == "PDF_FAILED uniquement":
+		status_filter = "('PDF_FAILED')"
 
 	raw = frappe.db.sql(
 		f"""

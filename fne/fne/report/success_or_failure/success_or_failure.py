@@ -6,6 +6,7 @@ _STATUS_COLORS = {
 	"PDF_READY":   "#28a745",
 	"CERTIFIED":   "#5e64ff",
 	"PDF_PENDING": "#fd7e14",
+	"PDF_FAILED":  "#e67e22",
 	"QUEUED":      "#4099ff",
 	"FAILED":      "#ff5858",
 	"DEAD":        "#dc3545",
@@ -61,15 +62,17 @@ def execute(filters=None):
 	}
 
 	# ─── Summary ───────────────────────────────────────────────────────────
-	success  = sum(r["cnt"] for r in data if r["status"] in _SUCCESS_STATUSES)
-	failures = sum(r["cnt"] for r in data if r["status"] in ("FAILED", "DEAD"))
-	rate     = round(100.0 * success / total, 1)
+	success    = sum(r["cnt"] for r in data if r["status"] in _SUCCESS_STATUSES)
+	pdf_failed = sum(r["cnt"] for r in data if r["status"] == "PDF_FAILED")
+	failures   = sum(r["cnt"] for r in data if r["status"] in ("FAILED", "DEAD"))
+	rate       = round(100.0 * success / total, 1)
 
 	summary = [
-		{"label": "Total",            "value": total,    "indicator": "blue"},
-		{"label": "Succès",           "value": success,  "indicator": "green"},
-		{"label": "Échecs / Dead",    "value": failures, "indicator": "red"},
-		{"label": "Taux de succès",   "value": f"{rate} %",
+		{"label": "Total",                  "value": total,      "indicator": "blue"},
+		{"label": "Succès",                 "value": success,    "indicator": "green"},
+		{"label": "PDF non récupéré",       "value": pdf_failed, "indicator": "orange"},
+		{"label": "Échecs certif. / Dead",  "value": failures,   "indicator": "red"},
+		{"label": "Taux de succès",         "value": f"{rate} %",
 			"indicator": "green" if rate >= 90 else ("orange" if rate >= 70 else "red")},
 	]
 
